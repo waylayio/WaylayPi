@@ -28,13 +28,13 @@ function fetchStatsAndStore {
     echo "Free swap=$FREE_SWAP MB"
 
     echo "Check disk Space:"
-    DISK=`df -h /  | grep dev`
-    TOTAL_DISK=`echo $DISK | awk '{ print $2}' | sed -r 's/G//g' `
-    USED_DISK=`echo $DISK | awk '{ print $3}'| sed -r 's/G//g'`
-    FREE_DISK=`echo $DISK | awk '{ print $4}'| sed -r 's/G//g'`
-    echo "Total disk=$TOTAL_DISK GB"
-    echo "Used disk=$USED_DISK GB"
-    echo "Free disk=$FREE_DISK GB"
+    DISK=`df --block-size=1 /  | grep dev`
+    TOTAL_DISK=`echo $DISK | awk '{ print $2}'`
+    USED_DISK=`echo $DISK | awk '{ print $3}'`
+    FREE_DISK=`echo $DISK | awk '{ print $4}'`
+    echo "Total disk=$TOTAL_DISK B"
+    echo "Used disk=$USED_DISK B"
+    echo "Free disk=$FREE_DISK B"
 
     CPU_USAGE=`top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1}'`
     echo "CPU usage=$CPU_USAGE %"
