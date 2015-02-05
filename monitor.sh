@@ -3,14 +3,6 @@ set -e
 
 # TODO: provide input args for the keys and domain
 
-###debug###
-echo before free
-free -t -m | grep Total
-echo after free
-echo "test1 test2 test3 test4" | awk '{ print $2}'
-echo after awk
-###########
-
 echo "Memory Space Details:"
 TOTAL=`free -t -m | grep Total`;
 TOTAL_MEM=`echo $TOTAL | awk '{ print $2}'`
