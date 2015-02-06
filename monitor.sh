@@ -27,7 +27,6 @@ function fetchStatsAndStore {
     CPU_USAGE=`top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1}'`
 
     JSON_BODY='{
-        "domain" : "'$WAYLAY_DOMAIN'",
         "cpuUsage": '$CPU_USAGE',
         "totalMemory":  '$TOTAL_MEM',
         "usedMemory" : '$USED_MEM' ,
@@ -41,7 +40,7 @@ function fetchStatsAndStore {
 
     echo ${JSON_BODY}
 
-    curl --user $WAYLAY_KEY:$WAYLAY_SECRET -H "Content-Type:application/json" -X POST -d "$JSON_BODY" https://data.waylay.io/resources/${RESOURCE} || true
+    curl --user $WAYLAY_KEY:$WAYLAY_SECRET -H "Content-Type:application/json" -X POST -d "$JSON_BODY" https://data.waylay.io/resources/${RESOURCE}?domain=$WAYLAY_DOMAIN || true
     # the || true makes sure the command does not exit on thing like: Couldn't resolve host 'data.waylay.io'
 }
 
