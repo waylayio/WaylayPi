@@ -39,18 +39,21 @@ function fetchStatsAndStore {
     CPU_USAGE=`top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1}'`
     echo "CPU usage=$CPU_USAGE %"
 
-    curl --user $WAYLAY_KEY:$WAYLAY_SECRET -H "Content-Type:application/json" -X POST -d '{
-    "domain" : "'$WAYLAY_DOMAIN'",
-    "cpuUsage": '$CPU_USAGE',
-    "totalMemory":  '$TOTAL_MEM',
-    "usedMemory" : '$USED_MEM' ,
-    "freeMemory" : '$FREE_MEM' ,
-    "totalSwap" :  '$TOTAL_SWAP',
-    "usedSwap" : '$USED_SWAP',
-    "freeSwap" : '$FREE_SWAP',
-    "totalDisk" : '$TOTAL_DISK',
-    "usedDisk" : '$USED_DISK',
-    "freeDisk" : '$FREE_DISK' }'  https://data.waylay.io/resources/${RESOURCE}
+    JSON_BODY='{
+        "domain" : "'$WAYLAY_DOMAIN'",
+        "cpuUsage": '$CPU_USAGE',
+        "totalMemory":  '$TOTAL_MEM',
+        "usedMemory" : '$USED_MEM' ,
+        "freeMemory" : '$FREE_MEM' ,
+        "totalSwap" :  '$TOTAL_SWAP',
+        "usedSwap" : '$USED_SWAP',
+        "freeSwap" : '$FREE_SWAP',
+        "totalDisk" : '$TOTAL_DISK',
+        "usedDisk" : '$USED_DISK',
+        "freeDisk" : '$FREE_DISK' }'
+
+    curl --user $WAYLAY_KEY:$WAYLAY_SECRET -H "Content-Type:application/json" -X POST -d ${JSON_BODY} https://data.waylay.io/resources/${RESOURCE} || true
+    # the || true makes sure the command does not exit on thing like: Couldn't resolve host 'data.waylay.io'
 }
 
 function sendAndSleep {
